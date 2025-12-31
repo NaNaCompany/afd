@@ -59,7 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
             outMessage.style.display = 'none';
         }
 
-        // 3. Switch Views with Animation
+        // 3. Switch Views with Animation AND Request Fullscreen
+        enterFullscreen();
+
         inputSection.style.opacity = '0';
 
         setTimeout(() => {
@@ -131,6 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         displaySection.style.opacity = '0';
 
+        exitFullscreen();
+
         setTimeout(() => {
             displaySection.classList.add('hidden');
             displaySection.style.display = 'none'; // Reset to none
@@ -141,5 +145,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 inputSection.style.opacity = '1';
             });
         }, 500);
+    }
+
+    function enterFullscreen() {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => console.log(err));
+        } else if (elem.webkitRequestFullscreen) { /* Safari */
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { /* IE11 */
+            elem.msRequestFullscreen();
+        }
+    }
+
+    function exitFullscreen() {
+        if (document.exitFullscreen) {
+            if (document.fullscreenElement) document.exitFullscreen().catch(err => console.log(err));
+        } else if (document.webkitExitFullscreen) { /* Safari */
+            if (document.webkitFullscreenElement) document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+            if (document.msFullscreenElement) document.msExitFullscreen();
+        }
     }
 });
